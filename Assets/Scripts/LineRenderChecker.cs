@@ -77,11 +77,6 @@ public class LineRenderChecker : MonoBehaviour
                 strategyComponents.Add(strategyComponent);
             }
         }
-        foreach(var strategyGObject in strategyGObjects)
-        {
-            strategyGObject.SetActive(false);
-        }
-
 
     }
 
@@ -92,7 +87,7 @@ public class LineRenderChecker : MonoBehaviour
     }
 
     // Get a specific strategy by index
-    public GameObject GetStrategy(int index)
+    private GameObject GetStrategy(int index)
     {
         if (index >= 0 && index < strategyGObjects.Count)
         {
@@ -102,41 +97,42 @@ public class LineRenderChecker : MonoBehaviour
         return null;
     }
 
-    public List<int> GetScoredStrategiesIndices<T>(List<T> grid) where T : IComparable<T>
+    private (List<int>, decimal) GetScoredStrategiesIndices(List<String> grid)
     {
         var strategyGObjectsIndices = new List<int>();
+        decimal totalMult = 0;
         // Iterate through each line
         // Each line has a GameObject (for rendering) and a script (score, shape, position)
         // Strategy(Grid) => Score (0 if no score, else score)
         for (int i = 0; i < strategyComponents.Count; i++)
         {
-            if (strategyComponents[i].GetScore(grid) > 0)
+            var mult = strategyComponents[i].GetMultiplier(grid);
+            if (mult != 0)
             {
                 strategyGObjectsIndices.Add(i);;
+                if (mult == -1)
+                {
+                    // Jackpot -- handle here
+                    break;
+                }
+
+                totalMult += mult;
             }
         }
 
-        return strategyGObjectsIndices;
+        return (strategyGObjectsIndices, totalMult);
     }
-
-    public uint GetTotalScore(List<int> strategyIndices)
+    
+    public decimal DoScoreCheck(List<String> grid, uint betAmount)
     {
-        uint score = 0;
-        foreach (var index in strategyIndices)
+        var (scoringStratsIndices, totalMult) = GetScoredStrategiesIndices(grid);
+        if (totalMult > 0)
         {
-            score += strategyComponents[index].GetLineStrategyScore();
+            return betAmount * totalMult;
         }
-        return score;
-    }
 
-    public void DoScoreCheck<T>(List<T> grid) where T : IComparable<T>
-    {
-        List<int> strategyIndices = GetScoredStrategiesIndices(grid);
-        uint score = GetTotalScore(strategyIndices);
-        foreach (var index in strategyIndices)
-        {
-            strategyGObjects[index].SetActive(true);
-        }
+        return 0;
+
     }
 
 }
