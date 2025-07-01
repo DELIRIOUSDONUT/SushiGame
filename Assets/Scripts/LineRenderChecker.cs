@@ -83,7 +83,7 @@ public class LineRenderChecker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     // Get a specific strategy by index

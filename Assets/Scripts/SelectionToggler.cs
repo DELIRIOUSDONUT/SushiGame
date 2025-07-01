@@ -6,14 +6,16 @@ using UnityEngine.UI;
 public class SelectionToggler : MonoBehaviour
 {
     [SerializeField] List<GameObject> Selections;
+    [SerializeField] GameObject LineSelectManager;
     bool isEvenOn = false;
     bool isOddOn = false;
     bool isAllOn = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
         ToggleNone();
+        var selectionTracker = LineSelectManager.GetComponent<SelectionTracker>();
+        selectionTracker.ResetSelections();
     }
 
     // Update is called once per frame
