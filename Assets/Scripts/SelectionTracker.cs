@@ -27,4 +27,9 @@ public class SelectionTracker : MonoBehaviour
     {
         _enabledSelections = Enumerable.Repeat(false, 20).ToList();
     }
+    
+    public int GetNumSelections()
+    {
+        return _enabledSelections.Count(item => item);
+    }
 }
