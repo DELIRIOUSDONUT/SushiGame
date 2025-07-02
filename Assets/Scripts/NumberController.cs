@@ -18,18 +18,28 @@ public class NumberController : MonoBehaviour
         for (int i = 0; i < _children.Count; i++)
         {
             var child = _children[i];
-            child.text = $"<color=#6A5900>{i+1}</color>";
+            child.color = new Color32(106, 89, 0, 255);
+            child.text = $"{i+1}";
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        for (int i = 0; i < _children.Count; i++)
+        {
+            //Highlight(i+1); // works
+        }
     }
     
     public void Highlight(int index)
     {
         _children[index-1].color = new Color32(255, 215, 0, 255);
+    }
+
+    public void Unhighlight(int index)
+    {
+        _children[index - 1].color = new Color32(106, 89, 0, 255);
+
     }
 }

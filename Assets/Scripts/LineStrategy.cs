@@ -31,6 +31,8 @@ public class LineStrategy : MonoBehaviour
         return set.Count switch
         {
             1 => ScoringDictionary.Scores[set.ElementAt(0)],
+            2 when !set.Contains("Jackpot") && set.Contains("Green") => ScoringDictionary.Scores["Green_2"],
+            2 when !set.Contains("Jackpot") && set.Contains("Yellow") => ScoringDictionary.Scores["Yellow_2"],
             2 when set.Contains("Jackpot") => ScoringDictionary.Scores[set.First(item => item != "Jackpot")],
             3 when set.Contains("Green") && set.Contains("Yellow") && set.Contains("Jackpot") => 
                 ScoringDictionary.Scores["Green-Yellow"],

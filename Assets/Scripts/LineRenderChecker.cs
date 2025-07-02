@@ -4,66 +4,17 @@ using UnityEngine;
 
 public class LineRenderChecker : MonoBehaviour
 {
-    [Header("Diagonal + Horizontal Lines")] [SerializeField]
-    private GameObject LRDownDiagTop;
-
-    [SerializeField] private GameObject LRDownDiagBottom;
-    [SerializeField] private GameObject LRUpDiagTop;
-    [SerializeField] private GameObject LRUpDiagBottom;
-    [SerializeField] private GameObject DiagDownLRTop;
-    [SerializeField] private GameObject DiagDownLRBottom;
-    [SerializeField] private GameObject DiagUpLRTop;
-    [SerializeField] private GameObject DiagUpLRBottom;
-
-    [Header("Tick Line")] [SerializeField] private GameObject TickV;
-
-    [Header("Long V Lines")] [SerializeField]
-    private GameObject LongDownV;
-
-    [SerializeField] private GameObject LongUpV;
-
-    [Header("Short V Lines")] [SerializeField]
-    private GameObject ShortDownVTop;
-
-    [SerializeField] private GameObject ShortDownVBottom;
-    [SerializeField] private GameObject ShortUpVTop;
-    [SerializeField] private GameObject ShortUpVBottom;
-
-    [Header("Straight Lines")] [SerializeField]
-    private GameObject StraightRowTop;
-
-    [SerializeField] private GameObject StraightRowMiddle;
-    [SerializeField] private GameObject StraightRowBottom;
-
     private List<GameObject> strategyGObjects;
     
     // Cache the component references
     private List<LineStrategy> strategyComponents;
 
+    [SerializeField] private List<GameObject> Lines;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        strategyGObjects = new List<GameObject>
-        {
-            LRDownDiagTop,
-            LRDownDiagBottom,
-            LRUpDiagTop,
-            LRUpDiagBottom,
-            DiagDownLRTop,
-            DiagDownLRBottom,
-            DiagUpLRTop,
-            DiagUpLRBottom,
-            TickV,
-            LongDownV,
-            LongUpV,
-            ShortDownVTop,
-            ShortDownVBottom,
-            ShortUpVTop,
-            ShortUpVBottom,
-            StraightRowTop,
-            StraightRowMiddle,
-            StraightRowBottom
-        };
+        strategyGObjects = Lines;
 
         // Cache all strategy components during initialization
         strategyComponents = new List<LineStrategy>(strategyGObjects.Count);
