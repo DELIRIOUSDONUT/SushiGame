@@ -32,4 +32,9 @@ public class SelectionTracker : MonoBehaviour
     {
         return _enabledSelections.Count(item => item);
     }
+
+    public List<bool> GetSelections()
+    {
+        return _enabledSelections;
+    }
 }

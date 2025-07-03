@@ -20,24 +20,24 @@ public class LineStrategy : MonoBehaviour
     {
         
     }
-    
     public decimal GetMultiplier(List<String> grid)
     {
-        HashSet<String> set = new HashSet<String>(new []
-        {
-            grid[Positions[0]], grid[Positions[1]], grid[Positions[2]]
-        });
+        var symbols = new[] { grid[Positions[0]-1], grid[Positions[1]-1], grid[Positions[2]-1] };
+        HashSet<String> set = new HashSet<String>(symbols);
+
+        // Count occurrences for Green and Yellow
+        var greenCount = symbols.Count(s => s == "Green");
+        var yellowCount = symbols.Count(s => s == "Yellow");
 
         return set.Count switch
         {
             1 => ScoringDictionary.Scores[set.ElementAt(0)],
-            2 when !set.Contains("Jackpot") && set.Contains("Green") => ScoringDictionary.Scores["Green_2"],
-            2 when !set.Contains("Jackpot") && set.Contains("Yellow") => ScoringDictionary.Scores["Yellow_2"],
+            2 when !set.Contains("Jackpot") && set.Contains("Green") && greenCount == 2 => ScoringDictionary.Scores["Green_2"],
+            2 when !set.Contains("Jackpot") && set.Contains("Yellow") && yellowCount == 2 => ScoringDictionary.Scores["Yellow_2"],
             2 when set.Contains("Jackpot") => ScoringDictionary.Scores[set.First(item => item != "Jackpot")],
             3 when set.Contains("Green") && set.Contains("Yellow") && set.Contains("Jackpot") => 
                 ScoringDictionary.Scores["Green-Yellow"],
             _ => 0
         };
-
     }
 }

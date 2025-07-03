@@ -27,8 +27,9 @@ public class ReelDisplayer : MonoBehaviour
     {
         Debug.Log($"Reel: {string.Join(", ", reel)}");
         _topSlot.sprite = reel[0];
-        _bottomSlot.sprite = reel[1];
-        _middleSlot.sprite = reel[2];
+        _middleSlot.sprite = reel[1];
+        _bottomSlot.sprite = reel[2];
+        
     }
     
 }

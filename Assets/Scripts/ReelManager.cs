@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ReelManager : MonoBehaviour
@@ -37,6 +38,8 @@ public class ReelManager : MonoBehaviour
 
     [SerializeField] private int minReelRollLength;
     [SerializeField] private int maxReelRollLength;
+
+    [SerializeField] private GameObject LineManager;
     
     // Actual representation of the reels
     private List<String> _leftReel;
@@ -54,10 +57,12 @@ public class ReelManager : MonoBehaviour
     // Map symbol names to sprites
     private Dictionary<string, Sprite> sprites;
     private Dictionary<string, Sprite> blurredSprites;
+    
+    private LineRenderChecker lineRenderChecker;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        lineRenderChecker = LineManager.GetComponent<LineRenderChecker>();   
         sprites = new Dictionary<string, Sprite>
         {
             ["Jackpot"] = JackpotIcon,
@@ -156,33 +161,84 @@ public class ReelManager : MonoBehaviour
         {
             reelWindow.Add(reel[i % reel.Count]);
         }
+        Debug.Log($"REELWINDOW window: {string.Join(",", reelWindow)}");
         return reelWindow;
     }
 
-    private void DisplayReel(ReelDisplayer reelDisplayer, int windowStart, List<String> reel)
+    private void DisplayReel(ReelDisplayer reelDisplayer, int windowStart, List<String> reel, bool blur)
     {   // First get reel window
         List<String> reelWindow = GetDisplayedReelsByIndex(reel, 3, windowStart);
         Debug.Log($"Reel Window: {string.Join(", ", reelWindow.Count)}");
         // Get associated sprites
+        var spriteDict = sprites;
+        if (blur)
+        {
+            spriteDict = blurredSprites;
+        }
         List<Sprite> reelSprites = new List<Sprite>();
         foreach (var symbol in reelWindow)
         {
-            reelSprites.Add(sprites[symbol]);
+            reelSprites.Add(spriteDict[symbol]);
         }
         Debug.Log($"Reel Sprites: {string.Join(", ", reelSprites.Count)}");
         // Display reel
         reelDisplayer.DisplayReel(reelSprites);
     }
     
-    private void AllReelsRoll()
+    public void AllReelsRoll()
     {
+        if (_leftReel == null || _middleReel == null || _rightReel == null)
+        {
+            return;
+        }
+
+        if (_leftReel.Count == 0 || _middleReel.Count == 0 || _rightReel.Count == 0)
+        {
+            return;
+        }
         _leftReelIndex = (_leftReelIndex + UnityEngine.Random.Range(minReelRollLength, maxReelRollLength + 1)) % _leftReel.Count;
         _middleReelIndex = (_middleReelIndex + UnityEngine.Random.Range(minReelRollLength, maxReelRollLength + 1)) % _middleReel.Count;
         _rightReelIndex = (_rightReelIndex + UnityEngine.Random.Range(minReelRollLength, maxReelRollLength + 1)) % _rightReel.Count;;
         // Display reels
-        DisplayReel(_reelDisplayerLeft, _leftReelIndex, _leftReel);
-        DisplayReel(_reelDisplayerMiddle, _middleReelIndex, _middleReel);
-        DisplayReel(_reelDisplayerRight, _rightReelIndex, _rightReel);
+        DisplayReel(_reelDisplayerLeft, _leftReelIndex, _leftReel, false);
+        DisplayReel(_reelDisplayerMiddle, _middleReelIndex, _middleReel, false);
+        DisplayReel(_reelDisplayerRight, _rightReelIndex, _rightReel, false);
+        
+        // After animations done, alert line render manager to render correct lines
+        lineRenderChecker.DoScoreCheck(PrepareGrid(
+            GetDisplayedReelsByIndex(_leftReel, 3, _leftReelIndex),
+            GetDisplayedReelsByIndex(_middleReel, 3, _middleReelIndex),
+            GetDisplayedReelsByIndex(_rightReel, 3, _rightReelIndex)
+        ), 100);
+    }
+
+    private List<String> PrepareGrid(List<String> leftWindow, List<String> midWindow, List<String> rightWindow)
+    {
+        Debug.Log($"Left window: {string.Join(",", leftWindow)}");
+        Debug.Log($"Middle window: {string.Join(",", midWindow)}");
+        Debug.Log($"Right window: {string.Join(",", rightWindow)}");
+        // Initialize list with 9 null/empty values
+        List<String> grid = Enumerable.Repeat(string.Empty, 9).ToList();
+    
+        // Fill left column (indices 0, 3, 6)
+        for (int i = 0; i < 3; i++)
+        {
+            grid[i * 3] = leftWindow[i];
+        }
+    
+        // Fill middle column (indices 1, 4, 7)
+        for (int i = 0; i < 3; i++)
+        {
+            grid[(i * 3) + 1] = midWindow[i];
+        }
+    
+        // Fill right column (indices 2, 5, 8)
+        for (int i = 0; i < 3; i++)
+        {
+            grid[(i * 3) + 2] = rightWindow[i];
+        }
+
+        return grid;
     }
 
 }
