@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class ClosePopup : MonoBehaviour
@@ -5,15 +6,20 @@ public class ClosePopup : MonoBehaviour
     [SerializeField] private GameObject MainGameFacade;
 
     [SerializeField] private GameObject LineSelectPopup;
+
+    [SerializeField] private GameObject TextToUpdate;
+    
     private SelectionTracker selectionTracker;
     private Animator mainGameAnimator;
     private Animator lineSelectAnimator;
+    private TextMeshPro textToUpdate;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         selectionTracker = LineSelectPopup.GetComponent<SelectionTracker>();
         mainGameAnimator = MainGameFacade.GetComponent<Animator>();
         lineSelectAnimator = LineSelectPopup.GetComponent<Animator>();
+        textToUpdate = TextToUpdate.GetComponent<TextMeshPro>();
     }
 
     // Update is called once per frame
@@ -28,6 +34,7 @@ public class ClosePopup : MonoBehaviour
         {
             mainGameAnimator.SetTrigger("DoSlide");
             lineSelectAnimator.SetTrigger("DoSlide");
+            textToUpdate.text = $"{selectionTracker.GetNumSelections()} DÒNG";
         }
     }
     
