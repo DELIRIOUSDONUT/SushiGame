@@ -448,7 +448,19 @@ MonoBehaviour:
   m_Group: {fileID: 4824762865175693867}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6923838886041479658}
+        m_TargetAssemblyTypeName: MoneyTracker, Assembly-CSharp
+        m_MethodName: SetBet
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1000
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
   m_IsOn: 0
 --- !u!1 &503226833130376563
 GameObject:
@@ -2785,7 +2797,19 @@ MonoBehaviour:
   m_Group: {fileID: 4824762865175693867}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6923838886041479658}
+        m_TargetAssemblyTypeName: MoneyTracker, Assembly-CSharp
+        m_MethodName: SetBet
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 10000
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
   m_IsOn: 0
 --- !u!1 &2177178575278762775
 GameObject:
@@ -3133,7 +3157,19 @@ MonoBehaviour:
   m_Group: {fileID: 4824762865175693867}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6923838886041479658}
+        m_TargetAssemblyTypeName: MoneyTracker, Assembly-CSharp
+        m_MethodName: SetBet
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 100
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
   m_IsOn: 0
 --- !u!1 &2462416103439407839
 GameObject:
@@ -4437,6 +4473,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+      - m_Target: {fileID: 8243729428993256586}
+        m_TargetAssemblyTypeName: ReelManager, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -8324,8 +8372,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 297b35a855bd44b0eb8e484183cf8dc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartingMoney: 100
+  StartingMoney: 1000000
   MoneyText: {fileID: 1664714731513000462}
+  LineSelectManager: {fileID: 0}
 --- !u!1 &8277831923930366205
 GameObject:
   m_ObjectHideFlags: 0
@@ -10222,6 +10271,10 @@ PrefabInstance:
       propertyPath: LineManager
       value: 
       objectReference: {fileID: 2040279052202712295}
+    - target: {fileID: 7151772236064989830, guid: 35ca7efa3cc3f42ceaabb04cdd41a61a, type: 3}
+      propertyPath: MainGameFacade
+      value: 
+      objectReference: {fileID: 8243729428993256586}
     - target: {fileID: 7498482458622350844, guid: 35ca7efa3cc3f42ceaabb04cdd41a61a, type: 3}
       propertyPath: m_MaskInteraction
       value: 1

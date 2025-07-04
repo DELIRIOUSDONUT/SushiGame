@@ -40,6 +40,9 @@ public class ReelManager : MonoBehaviour
     [SerializeField] private int maxReelRollLength;
 
     [SerializeField] private GameObject LineManager;
+    [SerializeField] private GameObject MainGameFacade;
+    
+    private MoneyTracker moneyTracker;
     
     // Actual representation of the reels
     private List<String> _leftReel;
@@ -63,6 +66,7 @@ public class ReelManager : MonoBehaviour
     void Start()
     {
         lineRenderChecker = LineManager.GetComponent<LineRenderChecker>();   
+        moneyTracker = MainGameFacade.GetComponent<MoneyTracker>();
         sprites = new Dictionary<string, Sprite>
         {
             ["Jackpot"] = JackpotIcon,
@@ -161,14 +165,14 @@ public class ReelManager : MonoBehaviour
         {
             reelWindow.Add(reel[i % reel.Count]);
         }
-        Debug.Log($"REELWINDOW window: {string.Join(",", reelWindow)}");
+        //Debug.Log($"REELWINDOW window: {string.Join(",", reelWindow)}");
         return reelWindow;
     }
 
     private void DisplayReel(ReelDisplayer reelDisplayer, int windowStart, List<String> reel, bool blur)
     {   // First get reel window
         List<String> reelWindow = GetDisplayedReelsByIndex(reel, 3, windowStart);
-        Debug.Log($"Reel Window: {string.Join(", ", reelWindow.Count)}");
+        //Debug.Log($"Reel Window: {string.Join(", ", reelWindow.Count)}");
         // Get associated sprites
         var spriteDict = sprites;
         if (blur)
@@ -180,7 +184,7 @@ public class ReelManager : MonoBehaviour
         {
             reelSprites.Add(spriteDict[symbol]);
         }
-        Debug.Log($"Reel Sprites: {string.Join(", ", reelSprites.Count)}");
+        //Debug.Log($"Reel Sprites: {string.Join(", ", reelSprites.Count)}");
         // Display reel
         reelDisplayer.DisplayReel(reelSprites);
     }
@@ -188,14 +192,14 @@ public class ReelManager : MonoBehaviour
     public void AllReelsRoll()
     {
         if (_leftReel == null || _middleReel == null || _rightReel == null)
-        {
-            return;
-        }
+        { return; }
 
         if (_leftReel.Count == 0 || _middleReel.Count == 0 || _rightReel.Count == 0)
-        {
-            return;
-        }
+        { return; }
+
+        if (moneyTracker.getCurrentBet() <= 0 || moneyTracker.getCurrentEarnings() < moneyTracker.getCurrentBet())
+        { return; }
+        
         _leftReelIndex = (_leftReelIndex + UnityEngine.Random.Range(minReelRollLength, maxReelRollLength + 1)) % _leftReel.Count;
         _middleReelIndex = (_middleReelIndex + UnityEngine.Random.Range(minReelRollLength, maxReelRollLength + 1)) % _middleReel.Count;
         _rightReelIndex = (_rightReelIndex + UnityEngine.Random.Range(minReelRollLength, maxReelRollLength + 1)) % _rightReel.Count;;
@@ -205,18 +209,20 @@ public class ReelManager : MonoBehaviour
         DisplayReel(_reelDisplayerRight, _rightReelIndex, _rightReel, false);
         
         // After animations done, alert line render manager to render correct lines
-        lineRenderChecker.DoScoreCheck(PrepareGrid(
+        var finalMult = lineRenderChecker.DoScoreCheck(PrepareGrid(
             GetDisplayedReelsByIndex(_leftReel, 3, _leftReelIndex),
             GetDisplayedReelsByIndex(_middleReel, 3, _middleReelIndex),
             GetDisplayedReelsByIndex(_rightReel, 3, _rightReelIndex)
-        ), 100);
+        ));
+
+        moneyTracker.UpdateEarnings(finalMult);
     }
 
     private List<String> PrepareGrid(List<String> leftWindow, List<String> midWindow, List<String> rightWindow)
     {
-        Debug.Log($"Left window: {string.Join(",", leftWindow)}");
-        Debug.Log($"Middle window: {string.Join(",", midWindow)}");
-        Debug.Log($"Right window: {string.Join(",", rightWindow)}");
+        //Debug.Log($"Left window: {string.Join(",", leftWindow)}");
+        //Debug.Log($"Middle window: {string.Join(",", midWindow)}");
+        //Debug.Log($"Right window: {string.Join(",", rightWindow)}");
         // Initialize list with 9 null/empty values
         List<String> grid = Enumerable.Repeat(string.Empty, 9).ToList();
     

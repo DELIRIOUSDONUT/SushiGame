@@ -61,7 +61,7 @@ public class LineRenderChecker : MonoBehaviour
         return null;
     }
 
-    private (List<int>, decimal) GetScoredStrategiesIndices(List<String> grid)
+    private (List<int>, decimal) GetScoredStrategiesIndices(List<String> grid, List<bool> selections)
     {
         var strategyGObjectsIndices = new List<int>();
         decimal totalMult = 0;
@@ -70,6 +70,7 @@ public class LineRenderChecker : MonoBehaviour
         // Strategy(Grid) => Score (0 if no score, else score)
         for (int i = 0; i < strategyComponents.Count; i++)
         {
+            if(!selections[i]){continue;}
             var mult = strategyComponents[i].GetMultiplier(grid);
             if (mult != 0)
             {
@@ -84,19 +85,19 @@ public class LineRenderChecker : MonoBehaviour
             }
         }
 
-        return (strategyGObjectsIndices, totalMult);
+        return (strategyGObjectsIndices, totalMult / selections.Count(x => x));
     }
     
-    public decimal DoScoreCheck(List<String> grid, uint betAmount)
+    public decimal DoScoreCheck(List<String> grid)
     {
-        Debug.Log($"Checking for lines: {string.Join(", ", grid)}");
+        //Debug.Log($"Checking for lines: {string.Join(", ", grid)}");
         if(selectionTracker == null){return 0;}
         List<bool> selections = selectionTracker.GetSelections();
         if (strategyComponents == null || strategyComponents.Count == 0 || strategyGObjects == null || strategyGObjects.Count == 0)
         {
             return 0;
         }
-        var (scoringStratsIndices, totalMult) = GetScoredStrategiesIndices(grid);
+        var (scoringStratsIndices, totalMult) = GetScoredStrategiesIndices(grid, selections);
 
         for (int i = 0; i < strategyGObjects.Count; i++)
         {
@@ -107,7 +108,7 @@ public class LineRenderChecker : MonoBehaviour
         StartCoroutine(ActivateLinesSequentially(scoringStratsIndices, selections));
         if (totalMult > 0)
         {
-            return betAmount * totalMult;
+            return totalMult;
         }
 
         return 0;

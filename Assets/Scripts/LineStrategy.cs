@@ -29,6 +29,9 @@ public class LineStrategy : MonoBehaviour
         var greenCount = symbols.Count(s => s == "Green");
         var yellowCount = symbols.Count(s => s == "Yellow");
 
+        //Debug.Log($"Symbols [{string.Join(", ", symbols)}], Positions [{string.Join(", ", Positions)}]");
+        if(greenCount == 3){return ScoringDictionary.Scores["Green"];}
+        if(yellowCount == 3){return ScoringDictionary.Scores["Yellow"];}
         return set.Count switch
         {
             1 => ScoringDictionary.Scores[set.ElementAt(0)],
