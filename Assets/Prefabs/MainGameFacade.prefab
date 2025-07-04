@@ -668,6 +668,7 @@ MonoBehaviour:
   reelManager: {fileID: 8454956893750791670}
   WaitTimeSeconds: 1
   lineRenderChecker: {fileID: 5379462524296481981}
+  moneyTracker: {fileID: 6923838886041479658}
 --- !u!1 &717840027426239806
 GameObject:
   m_ObjectHideFlags: 0
@@ -4410,7 +4411,7 @@ MonoBehaviour:
   ThisToggle: {fileID: 4067810158751174142}
   lineRenderChecker: {fileID: 5379462524296481981}
   speedUpFactor: 3
-  autoPlayScript: {fileID: 0}
+  autoPlayScript: {fileID: 8638046338668710137}
 --- !u!1 &4312723869171754949
 GameObject:
   m_ObjectHideFlags: 0

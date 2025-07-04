@@ -72,4 +72,9 @@ public class MoneyTracker : MonoBehaviour
     {
         return currentBet;
     }
+
+    public bool canRoll()
+    {
+        return currentEarnings >= currentBet;
+    }
 }

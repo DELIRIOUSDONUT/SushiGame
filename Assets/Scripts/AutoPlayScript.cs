@@ -9,6 +9,7 @@ public class AutoPlayScript : MonoBehaviour
     [SerializeField] ReelManager reelManager;
     [SerializeField] public float WaitTimeSeconds;
     [SerializeField] private LineRenderChecker lineRenderChecker;
+    [SerializeField] private MoneyTracker moneyTracker;
     private Coroutine repeatCoroutine;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -49,10 +50,13 @@ public class AutoPlayScript : MonoBehaviour
     
     private IEnumerator AutoPlayCoroutine()
     {
-        while (true)
+        while (moneyTracker.canRoll())
         {
             reelManager.AllReelsRoll();
             yield return new WaitForSeconds(WaitTimeSeconds);
         }
+        
+        ThisToggle.isOn = false;
+        repeatCoroutine = null;
     }
 }
