@@ -189,7 +189,7 @@ public class ReelManager : MonoBehaviour
         reelDisplayer.DisplayReel(reelSprites);
     }
     
-    public void AllReelsRoll()
+    public async void AllReelsRoll()
     {
         if (_leftReel == null || _middleReel == null || _rightReel == null)
         { return; }
@@ -209,7 +209,7 @@ public class ReelManager : MonoBehaviour
         DisplayReel(_reelDisplayerRight, _rightReelIndex, _rightReel, false);
         
         // After animations done, alert line render manager to render correct lines
-        var finalMult = lineRenderChecker.DoScoreCheck(PrepareGrid(
+        var finalMult = await lineRenderChecker.DoScoreCheck(PrepareGrid(
             GetDisplayedReelsByIndex(_leftReel, 3, _leftReelIndex),
             GetDisplayedReelsByIndex(_middleReel, 3, _middleReelIndex),
             GetDisplayedReelsByIndex(_rightReel, 3, _rightReelIndex)

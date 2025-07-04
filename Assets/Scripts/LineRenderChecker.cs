@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System.Threading.Tasks;
 
 
 public class LineRenderChecker : MonoBehaviour
@@ -21,6 +22,8 @@ public class LineRenderChecker : MonoBehaviour
     private NumberController numberController;
     
     private SelectionTracker selectionTracker;
+
+    private bool currentlyPlaying = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     
@@ -88,10 +91,11 @@ public class LineRenderChecker : MonoBehaviour
         return (strategyGObjectsIndices, totalMult / selections.Count(x => x));
     }
     
-    public decimal DoScoreCheck(List<String> grid)
+    public async Task<decimal> DoScoreCheck(List<String> grid)
     {
+        currentlyPlaying = true;
         //Debug.Log($"Checking for lines: {string.Join(", ", grid)}");
-        if(selectionTracker == null){return 0;}
+        //if(selectionTracker == null){return 0;}
         List<bool> selections = selectionTracker.GetSelections();
         if (strategyComponents == null || strategyComponents.Count == 0 || strategyGObjects == null || strategyGObjects.Count == 0)
         {
@@ -104,8 +108,12 @@ public class LineRenderChecker : MonoBehaviour
             numberController.Unhighlight(i+1);
             strategyGObjects[i].SetActive(false);
         }
-
-        StartCoroutine(ActivateLinesSequentially(scoringStratsIndices, selections));
+        
+        var tcs = new TaskCompletionSource<bool>();
+        StartCoroutine(ActivateLinesSequentially(scoringStratsIndices, selections, tcs));
+        await tcs.Task;
+        
+        currentlyPlaying = false;
         if (totalMult > 0)
         {
             return totalMult;
@@ -115,7 +123,8 @@ public class LineRenderChecker : MonoBehaviour
 
     }
     
-    private IEnumerator ActivateLinesSequentially(List<int> indices, List<bool> selections)
+    private IEnumerator ActivateLinesSequentially(List<int> indices, List<bool> selections, 
+                                                    TaskCompletionSource<bool> tcs)
     {
         // First get number of activated lines from selections
         float scaledDelay = displayDelay / (2 * selections.Count(x => x));
@@ -129,6 +138,13 @@ public class LineRenderChecker : MonoBehaviour
                 yield return new WaitForSeconds(scaledDelay);
             }
         }
+        
+        tcs.SetResult(true);
+    }
+
+    public bool isCurrentlyPlaying()
+    {
+        return currentlyPlaying;
     }
 
 
