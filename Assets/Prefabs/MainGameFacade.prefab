@@ -2575,6 +2575,8 @@ MonoBehaviour:
   - {fileID: 3722423516112712839}
   - {fileID: 1355934867619613641}
   SelectionTrackerObj: {fileID: 0}
+  displayDelay: 2
+  NumberControllerObj: {fileID: 2055566195507116778}
 --- !u!1 &2055566195507116778
 GameObject:
   m_ObjectHideFlags: 0

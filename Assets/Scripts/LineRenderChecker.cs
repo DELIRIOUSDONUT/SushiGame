@@ -1,6 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+
 
 public class LineRenderChecker : MonoBehaviour
 {
@@ -12,12 +15,18 @@ public class LineRenderChecker : MonoBehaviour
     [SerializeField] private List<GameObject> Lines;
     [SerializeField] private GameObject SelectionTrackerObj;
     
+    [SerializeField] private float displayDelay = 0.1f;
+    [SerializeField] private GameObject NumberControllerObj;
+    
+    private NumberController numberController;
+    
     private SelectionTracker selectionTracker;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     
     void Start()
     {
+        numberController = NumberControllerObj.GetComponent<NumberController>();
         strategyGObjects = Lines;
         selectionTracker = SelectionTrackerObj.GetComponent<SelectionTracker>();
         // Cache all strategy components during initialization
@@ -89,18 +98,13 @@ public class LineRenderChecker : MonoBehaviour
         }
         var (scoringStratsIndices, totalMult) = GetScoredStrategiesIndices(grid);
 
-        foreach (var line in strategyGObjects)
-        { 
-            line.SetActive(false);
+        for (int i = 0; i < strategyGObjects.Count; i++)
+        {
+            numberController.Unhighlight(i+1);
+            strategyGObjects[i].SetActive(false);
         }
 
-        foreach (var index in scoringStratsIndices)
-        {
-            if (selections[index])
-            {
-                strategyGObjects[index].SetActive(true);
-            }
-        }
+        StartCoroutine(ActivateLinesSequentially(scoringStratsIndices, selections));
         if (totalMult > 0)
         {
             return betAmount * totalMult;
@@ -109,5 +113,23 @@ public class LineRenderChecker : MonoBehaviour
         return 0;
 
     }
+    
+    private IEnumerator ActivateLinesSequentially(List<int> indices, List<bool> selections)
+    {
+        // First get number of activated lines from selections
+        float scaledDelay = displayDelay / (2 * selections.Count(x => x));
+        yield return new WaitForSeconds(scaledDelay);
+        foreach (var index in indices)
+        {
+            if (selections[index])
+            {
+                numberController.Highlight(index+1);
+                strategyGObjects[index].SetActive(true);
+                yield return new WaitForSeconds(scaledDelay);
+            }
+        }
+    }
+
+
 
 }

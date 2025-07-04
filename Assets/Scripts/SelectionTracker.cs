@@ -8,6 +8,7 @@ public class SelectionTracker : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        Debug.Log("Selection Tracker Started");
         _enabledSelections = Enumerable.Repeat(false, 20).ToList();
     }
 
@@ -19,6 +20,7 @@ public class SelectionTracker : MonoBehaviour
     
     public void ToggleSelection(int index)
     {
+        if(_enabledSelections == null){return;}
         _enabledSelections[index-1] = !_enabledSelections[index-1]; // -1 since indexing
         //Debug.Log($"Selections: [{string.Join(", ", _enabledSelections)}]");
     }
