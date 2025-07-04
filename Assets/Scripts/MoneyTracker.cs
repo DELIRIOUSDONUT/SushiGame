@@ -6,11 +6,13 @@ public class MoneyTracker : MonoBehaviour
     [SerializeField] private int StartingMoney;
     [SerializeField] private GameObject MoneyText;
     [SerializeField] private GameObject LineSelectManager;
+    [SerializeField] private JackpotTracker JackpotTracker;
     private TextMeshPro moneyText;
 
     private int currentBet;
     private int currentEarnings;
     private SelectionTracker selectionTracker;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -45,7 +47,18 @@ public class MoneyTracker : MonoBehaviour
         Debug.Log($"Current Earnings: {currentEarnings}");
         Debug.Log($"Current Bet: {currentBet}");
         currentEarnings -= currentBet;
-        currentEarnings += (int)(currentBet * multiplier);
+        int currEarnings = 0;
+        if (multiplier < 0)
+        {
+            // Jackpot case
+            currentEarnings += JackpotTracker.JackpotExplosion();
+        }
+        else
+        {
+            currEarnings = (int)(currentBet * multiplier);
+            JackpotTracker.UpdatePot(currentBet - currEarnings);
+            currentEarnings += currEarnings;
+        }
         currentEarnings = Mathf.Clamp(currentEarnings, 0, 100000000);
         UpdateMoney(currentEarnings);
     }

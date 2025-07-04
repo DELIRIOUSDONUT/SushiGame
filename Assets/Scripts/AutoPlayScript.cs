@@ -7,7 +7,7 @@ public class AutoPlayScript : MonoBehaviour
 {
     [SerializeField] private Toggle ThisToggle;
     [SerializeField] ReelManager reelManager;
-    [SerializeField] private float WaitTimeSeconds;
+    [SerializeField] public float WaitTimeSeconds;
     [SerializeField] private LineRenderChecker lineRenderChecker;
     private Coroutine repeatCoroutine;
     // Start is called once before the first execution of Update after the MonoBehaviour is created

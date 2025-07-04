@@ -146,7 +146,16 @@ public class LineRenderChecker : MonoBehaviour
     {
         return currentlyPlaying;
     }
+    
+    public float GetDisplayDelay()
+    {
+        return displayDelay;
+    }
 
+    public void SetDisplayDelay(float delay)
+    {
+        displayDelay = delay;
+    }
 
 
 }
