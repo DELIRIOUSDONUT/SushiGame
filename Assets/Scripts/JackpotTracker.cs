@@ -13,7 +13,15 @@ public class JackpotTracker : MonoBehaviour
     void Start()
     {
         JackPotText = JackPotObject.GetComponent<TextMeshPro>();
-        potAmount = StartingPot;
+        if (PlayerPrefs.HasKey("Jackpot"))
+        {
+            potAmount = PlayerPrefs.GetInt("Jackpot");
+        }
+        else
+        {
+            potAmount = StartingPot;
+            PlayerPrefs.SetInt("Jackpot", potAmount);
+        }
         UpdateText();
     }
 
@@ -32,6 +40,7 @@ public class JackpotTracker : MonoBehaviour
         potAmount += amount;
         potAmount = Math.Clamp(potAmount, 0, 1000000000);
         UpdateText();
+        PlayerPrefs.SetInt("Jackpot", potAmount);
         
     }
 
@@ -40,6 +49,7 @@ public class JackpotTracker : MonoBehaviour
         var amount = potAmount;
         potAmount = 0;
         UpdateText();
+        PlayerPrefs.SetInt("Jackpot", potAmount);
         return amount;
     }
 }

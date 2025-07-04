@@ -19,7 +19,18 @@ public class MoneyTracker : MonoBehaviour
         moneyText = MoneyText.GetComponent<TextMeshPro>();
         moneyText.text = $"{StartingMoney}";
         currentBet = 0;
-        currentEarnings = StartingMoney;
+
+        if (PlayerPrefs.HasKey("PlayerMoney"))
+        {
+            currentEarnings = PlayerPrefs.GetInt("PlayerMoney");
+            UpdateMoney(currentEarnings);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("PlayerMoney", StartingMoney);
+            currentEarnings = StartingMoney;
+        }
+        
         selectionTracker = LineSelectManager.GetComponent<SelectionTracker>();
     }
 
@@ -61,6 +72,7 @@ public class MoneyTracker : MonoBehaviour
         }
         currentEarnings = Mathf.Clamp(currentEarnings, 0, 100000000);
         UpdateMoney(currentEarnings);
+        PlayerPrefs.SetInt("PlayerMoney", currentEarnings);
     }
 
     public int getCurrentEarnings()
