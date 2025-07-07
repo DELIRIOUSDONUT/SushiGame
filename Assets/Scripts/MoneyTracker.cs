@@ -7,6 +7,7 @@ public class MoneyTracker : MonoBehaviour
     [SerializeField] private GameObject MoneyText;
     [SerializeField] private GameObject LineSelectManager;
     [SerializeField] private JackpotTracker JackpotTracker;
+    [SerializeField] private bool loadState;
     private TextMeshPro moneyText;
 
     private int currentBet;
@@ -20,7 +21,7 @@ public class MoneyTracker : MonoBehaviour
         moneyText.text = $"{StartingMoney}";
         currentBet = 0;
 
-        if (PlayerPrefs.HasKey("PlayerMoney"))
+        if (PlayerPrefs.HasKey("PlayerMoney") && loadState)
         {
             currentEarnings = PlayerPrefs.GetInt("PlayerMoney");
             UpdateMoney(currentEarnings);
