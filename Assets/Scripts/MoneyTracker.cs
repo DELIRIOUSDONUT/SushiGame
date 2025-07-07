@@ -55,9 +55,9 @@ public class MoneyTracker : MonoBehaviour
 
     public void UpdateEarnings(decimal multiplier)
     {
-        Debug.Log($"Scaled multiplier: {multiplier}");
-        Debug.Log($"Current Earnings: {currentEarnings}");
-        Debug.Log($"Current Bet: {currentBet}");
+        //Debug.Log($"Scaled multiplier: {multiplier}");
+        //Debug.Log($"Current Earnings: {currentEarnings}");
+        //Debug.Log($"Current Bet: {currentBet}");
         currentEarnings -= currentBet;
         int currEarnings = 0;
         if (multiplier < 0)

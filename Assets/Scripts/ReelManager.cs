@@ -166,6 +166,7 @@ public class ReelManager : MonoBehaviour
         {
             reelWindow.Add(reel[i % reel.Count]);
         }
+        reelWindow.Reverse();
         //Debug.Log($"REELWINDOW window: {string.Join(",", reelWindow)}");
         return reelWindow;
     }

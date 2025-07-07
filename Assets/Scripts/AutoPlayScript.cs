@@ -25,12 +25,11 @@ public class AutoPlayScript : MonoBehaviour
 
     private void OnToggleValueChanged(bool value)
     {
-        if (lineRenderChecker.isCurrentlyPlaying())
-        {
-            ThisToggle.isOn = false;
-            return;
-            
-        }
+        //if (lineRenderChecker.isCurrentlyPlaying())
+        //{
+        //    ThisToggle.isOn = true;
+        //    return;
+        //}
         if (value)
         {
             if (repeatCoroutine == null)
@@ -40,6 +39,7 @@ public class AutoPlayScript : MonoBehaviour
         }
         else
         {
+            Debug.Log("Stopping AutoPlay");
             if (repeatCoroutine != null)
             {
                 StopCoroutine(repeatCoroutine);
