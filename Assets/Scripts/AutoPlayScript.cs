@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -52,11 +53,24 @@ public class AutoPlayScript : MonoBehaviour
     {
         while (moneyTracker.canRoll())
         {
-            reelManager.AllReelsRoll();
+            Task rollTask = reelManager.AllReelsRollAsync(); 
+            yield return WaitForTask(rollTask);
+
             yield return new WaitForSeconds(WaitTimeSeconds);
         }
-        
+
         ThisToggle.isOn = false;
         repeatCoroutine = null;
     }
+    
+    private IEnumerator WaitForTask(Task task)
+    {
+        while (!task.IsCompleted)
+            yield return null;
+
+        if (task.IsFaulted)
+            Debug.LogException(task.Exception);
+    }
+
+
 }

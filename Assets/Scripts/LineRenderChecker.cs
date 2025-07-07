@@ -157,5 +157,14 @@ public class LineRenderChecker : MonoBehaviour
         displayDelay = delay;
     }
 
+    public void TurnOffLines()
+    {
+        for (int i = 0; i < strategyGObjects.Count; i++)
+        {
+            strategyGObjects[i].SetActive(false);
+        }
+        numberController.UnhighlightAll();
+    }
+
 
 }

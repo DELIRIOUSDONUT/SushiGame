@@ -63,6 +63,12 @@ public class ReelManager : MonoBehaviour
     private Dictionary<string, Sprite> blurredSprites;
     
     private LineRenderChecker lineRenderChecker;
+    
+    [SerializeField] private ReelRoller leftReelRoller;
+    [SerializeField] private ReelRoller middleReelRoller;
+    [SerializeField] private ReelRoller rightReelRoller;
+    
+    private bool canRoll = true;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -100,19 +106,44 @@ public class ReelManager : MonoBehaviour
         _middleReel = GenerateReel(ReelMiddleJackpot);
         _rightReel = GenerateReel(ReelRightJackpot);
         
+        // Generate their rollers
+        leftReelRoller.GenerateSlots(GenerateWholeReel(_leftReel));
+        middleReelRoller.GenerateSlots(GenerateWholeReel(_middleReel));
+        rightReelRoller.GenerateSlots(GenerateWholeReel(_rightReel));
+        
         // Init random starting index for each reel
         _leftReelIndex = UnityEngine.Random.Range(0, _leftReel.Count);
         _middleReelIndex = UnityEngine.Random.Range(0, _middleReel.Count);
         _rightReelIndex = UnityEngine.Random.Range(0, _rightReel.Count);
+        
+        leftReelRoller.MoveTo(_leftReelIndex);
+        middleReelRoller.MoveTo(_middleReelIndex);
+        rightReelRoller.MoveTo(_rightReelIndex);
         
         // Adjust minReel and maxReel roll lengths  (dont include jackpot count for consistency)
         minReelRollLength = Mathf.Max(minReelRollLength, _leftReel.Count - ReelLeftJackpot);
         maxReelRollLength = Mathf.Min(maxReelRollLength, _leftReel.Count - ReelLeftJackpot);
         
         // Set initial slots
-        AllReelsRoll();
+        //AllReelsRoll();
+        
+        
+        
+        // For testing
+        Debug.Log($"str: {GetDisplayedReelsByIndex(_leftReel, 3, _leftReelIndex)}");
+        Debug.Log($"str: {GetDisplayedReelsByIndex(_middleReel, 3, _middleReelIndex)}");
+        Debug.Log($"str: {GetDisplayedReelsByIndex(_rightReel, 3, _rightReelIndex)}");
     }
 
+    private List<Sprite> GenerateWholeReel(List<String> reel)
+    {
+        List<Sprite> reelSprites = new List<Sprite>();
+        foreach(var slot in reel)
+        {
+            reelSprites.Add(sprites[slot]);
+        }
+        return reelSprites;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -167,32 +198,23 @@ public class ReelManager : MonoBehaviour
             reelWindow.Add(reel[i % reel.Count]);
         }
         reelWindow.Reverse();
-        //Debug.Log($"REELWINDOW window: {string.Join(",", reelWindow)}");
+        Debug.Log($"REELWINDOW window: {string.Join(",", reelWindow)}");
         return reelWindow;
     }
 
-    private void DisplayReel(ReelDisplayer reelDisplayer, int windowStart, List<String> reel, bool blur)
-    {   // First get reel window
-        List<String> reelWindow = GetDisplayedReelsByIndex(reel, 3, windowStart);
-        //Debug.Log($"Reel Window: {string.Join(", ", reelWindow.Count)}");
-        // Get associated sprites
-        var spriteDict = sprites;
-        if (blur)
-        {
-            spriteDict = blurredSprites;
-        }
-        List<Sprite> reelSprites = new List<Sprite>();
-        foreach (var symbol in reelWindow)
-        {
-            reelSprites.Add(spriteDict[symbol]);
-        }
-        //Debug.Log($"Reel Sprites: {string.Join(", ", reelSprites.Count)}");
-        // Display reel
-        reelDisplayer.DisplayReel(reelSprites);
+    private async Task DisplayReel(int numSlots)
+    {   
+        Task left = leftReelRoller.AnimateReelDownAsync(numSlots);
+        Task mid = middleReelRoller.AnimateReelDownAsync(numSlots);
+        Task right = rightReelRoller.AnimateReelDownAsync(numSlots);
+        
+        await Task.WhenAll(left, mid, right);
     }
     
-    public async void AllReelsRoll()
+    public async Task AllReelsRollAsync()
     {
+        canRoll = false;
+        lineRenderChecker.TurnOffLines();
         if (_leftReel == null || _middleReel == null || _rightReel == null)
         { return; }
 
@@ -202,13 +224,14 @@ public class ReelManager : MonoBehaviour
         if (moneyTracker.getCurrentBet() <= 0 || moneyTracker.getCurrentEarnings() < moneyTracker.getCurrentBet())
         { return; }
         
-        _leftReelIndex = (_leftReelIndex + UnityEngine.Random.Range(minReelRollLength, maxReelRollLength + 1)) % _leftReel.Count;
-        _middleReelIndex = (_middleReelIndex + UnityEngine.Random.Range(minReelRollLength, maxReelRollLength + 1)) % _middleReel.Count;
-        _rightReelIndex = (_rightReelIndex + UnityEngine.Random.Range(minReelRollLength, maxReelRollLength + 1)) % _rightReel.Count;;
+        int randomReelRollOffset = UnityEngine.Random.Range(minReelRollLength, maxReelRollLength + 1);
+        
+        _leftReelIndex = (_leftReelIndex + randomReelRollOffset)%_leftReel.Count;
+        _middleReelIndex = (_middleReelIndex + randomReelRollOffset)%_middleReel.Count;
+        _rightReelIndex = (_rightReelIndex + randomReelRollOffset)%_rightReel.Count;
+        
         // Display reels
-        DisplayReel(_reelDisplayerLeft, _leftReelIndex, _leftReel, false);
-        DisplayReel(_reelDisplayerMiddle, _middleReelIndex, _middleReel, false);
-        DisplayReel(_reelDisplayerRight, _rightReelIndex, _rightReel, false);
+        await DisplayReel(randomReelRollOffset);
         
         // After animations done, alert line render manager to render correct lines
         var finalMult = await lineRenderChecker.DoScoreCheck(PrepareGrid(
@@ -218,8 +241,18 @@ public class ReelManager : MonoBehaviour
         ));
 
         moneyTracker.UpdateEarnings(finalMult);
+        canRoll = true;
     }
 
+    public async void AllReelsRoll()
+    {
+        await AllReelsRollAsync();
+    }
+
+    public bool CanRoll()
+    {
+        return canRoll;
+    }
     private List<String> PrepareGrid(List<String> leftWindow, List<String> midWindow, List<String> rightWindow)
     {
         //Debug.Log($"Left window: {string.Join(",", leftWindow)}");

@@ -42,4 +42,12 @@ public class NumberController : MonoBehaviour
         _children[index - 1].color = new Color32(106, 89, 0, 255);
 
     }
+    
+    public void UnhighlightAll()
+    {
+        for (int i = 0; i < _children.Count; i++)
+        {
+            _children[i].color = new Color32(106, 89, 0, 255);
+        }
+    }
 }
