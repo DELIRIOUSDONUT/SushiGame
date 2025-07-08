@@ -22,11 +22,6 @@ public class ReelManager : MonoBehaviour
     [SerializeField] private Sprite BlurredYellowIcon;
     [SerializeField] private Sprite BlurredGreenIcon;
     
-    // Reels
-    [SerializeField] private GameObject ReelLeft;
-    [SerializeField] private GameObject ReelMiddle;
-    [SerializeField] private GameObject ReelRight;
-    
     // Distribution of slot symbols
     [SerializeField] private int ReelLeftJackpot;
     [SerializeField] private int ReelMiddleJackpot;
@@ -42,6 +37,10 @@ public class ReelManager : MonoBehaviour
 
     [SerializeField] private GameObject LineManager;
     [SerializeField] private GameObject MainGameFacade;
+    
+    [SerializeField] private int LeftReelDelay = 0;
+    [SerializeField] private int MidReelDelay = 200;
+    [SerializeField] private int RightReelDelay = 400;
     
     private MoneyTracker moneyTracker;
     
@@ -94,12 +93,6 @@ public class ReelManager : MonoBehaviour
             ["Orange"] = BlurredOrangeIcon,
             ["Pink"] = BlurredPinkIcon
         };
-        
-        
-        // Get reel displayers
-        _reelDisplayerLeft = ReelLeft.GetComponent<ReelDisplayer>();
-        _reelDisplayerMiddle = ReelMiddle.GetComponent<ReelDisplayer>();
-        _reelDisplayerRight = ReelRight.GetComponent<ReelDisplayer>();
         
         // For each reel, generate a randomized list with their given distributions
         _leftReel = GenerateReel(ReelLeftJackpot);
@@ -203,13 +196,20 @@ public class ReelManager : MonoBehaviour
     }
 
     private async Task DisplayReel(int numSlots)
-    {   
-        Task left = leftReelRoller.AnimateReelDownAsync(numSlots);
-        Task mid = middleReelRoller.AnimateReelDownAsync(numSlots);
-        Task right = rightReelRoller.AnimateReelDownAsync(numSlots);
-        
+    {
+        async Task DelayedRoll(Func<Task> reelFunc, int delay)
+        {
+            await Task.Delay(delay);
+            await reelFunc();
+        }
+
+        Task left = DelayedRoll(() => leftReelRoller.AnimateReelDownAsync(numSlots), LeftReelDelay);
+        Task mid  = DelayedRoll(() => middleReelRoller.AnimateReelDownAsync(numSlots), MidReelDelay);
+        Task right = DelayedRoll(() => rightReelRoller.AnimateReelDownAsync(numSlots), RightReelDelay);
+
         await Task.WhenAll(left, mid, right);
     }
+
     
     public async Task AllReelsRollAsync()
     {
