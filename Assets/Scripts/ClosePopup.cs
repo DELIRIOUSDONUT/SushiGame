@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.WSA;
 
 public class ClosePopup : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class ClosePopup : MonoBehaviour
     [SerializeField] private GameObject LineSelectPopup;
 
     [SerializeField] private GameObject TextToUpdate;
+    [SerializeField] private ToastEvent ToastMessageAnimator;
     
     private SelectionTracker selectionTracker;
     private Animator mainGameAnimator;
@@ -35,6 +37,10 @@ public class ClosePopup : MonoBehaviour
             mainGameAnimator.SetTrigger("DoSlide");
             lineSelectAnimator.SetTrigger("DoSlide");
             textToUpdate.text = $"{selectionTracker.GetNumSelections()} DÒNG";
+        }
+        else
+        {
+            ToastMessageAnimator.SetAnimationLock();
         }
     }
     

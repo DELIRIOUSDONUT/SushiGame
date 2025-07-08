@@ -669,7 +669,7 @@ MonoBehaviour:
   WaitTimeSeconds: 1
   lineRenderChecker: {fileID: 5379462524296481981}
   moneyTracker: {fileID: 6923838886041479658}
-  ToastMessageAnimator: {fileID: 3275343797205531425}
+  ToastMessageAnimator: {fileID: 6962317814335204699}
 --- !u!1 &717840027426239806
 GameObject:
   m_ObjectHideFlags: 0
@@ -6586,6 +6586,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4250268313090914762}
   - component: {fileID: 3275343797205531425}
+  - component: {fileID: 6962317814335204699}
   m_Layer: 0
   m_Name: AutoplayToastParent
   m_TagString: Untagged
@@ -6632,6 +6633,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6962317814335204699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6136068179750964382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a413db56e235543eda2f49a5155d1e47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ToastAnimator: {fileID: 3275343797205531425}
 --- !u!1 &6136154806936173284
 GameObject:
   m_ObjectHideFlags: 0
