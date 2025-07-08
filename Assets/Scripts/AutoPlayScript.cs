@@ -11,6 +11,7 @@ public class AutoPlayScript : MonoBehaviour
     [SerializeField] public float WaitTimeSeconds;
     [SerializeField] private LineRenderChecker lineRenderChecker;
     [SerializeField] private MoneyTracker moneyTracker;
+    [SerializeField] private Animator ToastMessageAnimator;
     private Coroutine repeatCoroutine;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -37,6 +38,7 @@ public class AutoPlayScript : MonoBehaviour
             {
                 repeatCoroutine = StartCoroutine(AutoPlayCoroutine());
             }
+            ToastMessageAnimator.SetTrigger("Play");
         }
         else
         {
