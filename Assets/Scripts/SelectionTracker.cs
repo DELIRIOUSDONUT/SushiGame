@@ -8,7 +8,7 @@ public class SelectionTracker : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Debug.Log("Selection Tracker Started");
+        //Debug.Log("Selection Tracker Started");
         _enabledSelections = Enumerable.Repeat(false, 20).ToList();
     }
 

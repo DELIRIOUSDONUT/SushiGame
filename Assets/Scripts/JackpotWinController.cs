@@ -20,10 +20,10 @@ public class JackpotWinController : MonoBehaviour
     
     public async void PlayWinningAnimation()
     {
-        Debug.Log("Animation started");
+        //Debug.Log("Animation started");
         JackpotWinningAnimator.SetTrigger("Win");
         await WaitForAnimation("Win");
-        Debug.Log("Animation finished");
+        //Debug.Log("Animation finished");
     }
     
     public async Task WaitForAnimation(string stateName, int layer = 0)

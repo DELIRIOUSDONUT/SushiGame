@@ -29,7 +29,7 @@ public class TogglerScript : MonoBehaviour
 
     public void ToggleAttachedObjects()
     {
-        Debug.Log("Toggling");
+        //Debug.Log("Toggling");
         foreach (var toggle in toggles)
         {
             toggle.value = !toggle.value;

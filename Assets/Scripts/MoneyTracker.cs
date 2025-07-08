@@ -43,7 +43,7 @@ public class MoneyTracker : MonoBehaviour
 
     void UpdateMoney(int amount)
     {
-        moneyText.text = $"{amount}";
+        moneyText.text = $"{amount}$";
     }
 
     public void SetBet(int amount)
@@ -89,5 +89,12 @@ public class MoneyTracker : MonoBehaviour
     public bool canRoll()
     {
         return currentEarnings >= currentBet;
+    }
+    
+    public void SetMoney(int amount)
+    {
+        currentEarnings = amount;
+        UpdateMoney(amount);
+        PlayerPrefs.SetInt("PlayerMoney", amount);
     }
 }

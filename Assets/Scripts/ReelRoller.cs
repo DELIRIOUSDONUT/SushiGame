@@ -13,7 +13,7 @@ public class ReelRoller : MonoBehaviour
 
     [SerializeField] private float SlotSpacing;
     [SerializeField] private Transform BottomSlotIntendedTransform;
-    [SerializeField] private float MoveDuration;
+    [SerializeField] public float MoveDuration;
 
     private float currentY;
     private int slotCount = 0;
@@ -89,7 +89,7 @@ public class ReelRoller : MonoBehaviour
 
     void FixPosition()
     {
-        Debug.Log($"Bottom Slot Intended Pos: {BottomSlotIntendedTransform.position}");
+        //Debug.Log($"Bottom Slot Intended Pos: {BottomSlotIntendedTransform.position}");
         Vector3 bottomPos = RectContainer.GetChild(0).transform.position;
         
         // Get difference between the child's pos and the intended transform pos
@@ -101,7 +101,7 @@ public class ReelRoller : MonoBehaviour
         // Store the base position in anchored coordinates for consistency
         basePosition = RectContainer.anchoredPosition;
         
-        Debug.Log($"Bottom child pos now: {RectContainer.GetChild(0).transform.position}");
+        //Debug.Log($"Bottom child pos now: {RectContainer.GetChild(0).transform.position}");
     }
     public async Task AnimateReelDownAsync(int numSlots)
     {
@@ -180,7 +180,7 @@ public class ReelRoller : MonoBehaviour
         RectContainer.anchoredPosition = basePosition;
         currentSlotOffset = 0;
         
-        Debug.Log("Reel position reset to prevent infinite scrolling");
+        //Debug.Log("Reel position reset to prevent infinite scrolling");
     }
 
     public void MoveTo(int index)

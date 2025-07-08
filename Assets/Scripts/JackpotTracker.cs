@@ -36,7 +36,7 @@ public class JackpotTracker : MonoBehaviour
 
     public void UpdateText()
     {
-        JackPotText.text = $"{potAmount}";
+        JackPotText.text = $"{potAmount}$";
     }
     public void UpdatePot(int amount)
     {

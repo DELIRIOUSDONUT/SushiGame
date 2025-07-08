@@ -42,7 +42,7 @@ public class AutoPlayScript : MonoBehaviour
         }
         else
         {
-            Debug.Log("Stopping AutoPlay");
+            //Debug.Log("Stopping AutoPlay");
             if (repeatCoroutine != null)
             {
                 StopCoroutine(repeatCoroutine);

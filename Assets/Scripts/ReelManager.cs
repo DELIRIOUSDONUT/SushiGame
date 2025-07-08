@@ -114,8 +114,8 @@ public class ReelManager : MonoBehaviour
         rightReelRoller.MoveTo(_rightReelIndex);
         
         // Adjust minReel and maxReel roll lengths  (dont include jackpot count for consistency)
-        minReelRollLength = Mathf.Max(minReelRollLength, _leftReel.Count - ReelLeftJackpot);
-        maxReelRollLength = Mathf.Min(maxReelRollLength, _leftReel.Count - ReelLeftJackpot);
+        //minReelRollLength = Mathf.Max(minReelRollLength, _leftReel.Count - ReelLeftJackpot);
+        //maxReelRollLength = Mathf.Min(maxReelRollLength, _leftReel.Count - ReelLeftJackpot);
         
         // Set initial slots
         //AllReelsRoll();
@@ -123,9 +123,9 @@ public class ReelManager : MonoBehaviour
         
         
         // For testing
-        Debug.Log($"str: {GetDisplayedReelsByIndex(_leftReel, 3, _leftReelIndex)}");
-        Debug.Log($"str: {GetDisplayedReelsByIndex(_middleReel, 3, _middleReelIndex)}");
-        Debug.Log($"str: {GetDisplayedReelsByIndex(_rightReel, 3, _rightReelIndex)}");
+        //Debug.Log($"str: {GetDisplayedReelsByIndex(_leftReel, 3, _leftReelIndex)}");
+        //Debug.Log($"str: {GetDisplayedReelsByIndex(_middleReel, 3, _middleReelIndex)}");
+        //Debug.Log($"str: {GetDisplayedReelsByIndex(_rightReel, 3, _rightReelIndex)}");
     }
 
     private List<Sprite> GenerateWholeReel(List<String> reel)
@@ -191,7 +191,7 @@ public class ReelManager : MonoBehaviour
             reelWindow.Add(reel[i % reel.Count]);
         }
         reelWindow.Reverse();
-        Debug.Log($"REELWINDOW window: {string.Join(",", reelWindow)}");
+        //Debug.Log($"REELWINDOW window: {string.Join(",", reelWindow)}");
         return reelWindow;
     }
 
