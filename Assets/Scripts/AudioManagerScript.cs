@@ -5,6 +5,8 @@ public class AudioManagerScript : MonoBehaviour
 {
     [SerializeField] private AudioSource LineScoreAudio;
     [SerializeField] private AudioSource SlotAudio;
+    [SerializeField] private AudioSource DrummingAudio;
+    [SerializeField] private AudioSource SingleRollAudio;
 
     private float _defaultPitch;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -30,6 +32,12 @@ public class AudioManagerScript : MonoBehaviour
             case "SlotAudio":
                 SlotAudio.Play();
                 break;
+            case "DrummingAudio":
+                DrummingAudio.Play();
+                break;
+            case "SingleRollAudio":
+                SingleRollAudio.PlayOneShot(SingleRollAudio.clip);
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(audioName), audioName, null);
                 // "Audio not found"
@@ -45,6 +53,12 @@ public class AudioManagerScript : MonoBehaviour
                 break;
             case "SlotAudio":
                 SlotAudio.Stop();
+                break;
+            case "DrummingAudio":
+                DrummingAudio.Stop();
+                break;
+            case "SingleRollAudio":
+                SingleRollAudio.Stop();
                 break;
             default:    
                 throw new ArgumentOutOfRangeException(nameof(audioName), audioName, null);

@@ -12,6 +12,7 @@ public class AutoPlayScript : MonoBehaviour
     [SerializeField] private LineRenderChecker lineRenderChecker;
     [SerializeField] private MoneyTracker moneyTracker;
     [SerializeField] private ToastEvent ToastMessageAnimator;
+    [SerializeField] private AudioManagerScript audioManager;
     private Coroutine repeatCoroutine;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -32,13 +33,14 @@ public class AutoPlayScript : MonoBehaviour
         //    ThisToggle.isOn = true;
         //    return;
         //}
-        if (value)
+        if (value && moneyTracker.canRoll())
         {
             if (repeatCoroutine == null)
             {
                 repeatCoroutine = StartCoroutine(AutoPlayCoroutine());
             }
             ToastMessageAnimator.SetAnimationLock();
+            
         }
         else
         {
@@ -48,11 +50,14 @@ public class AutoPlayScript : MonoBehaviour
                 StopCoroutine(repeatCoroutine);
                 repeatCoroutine = null;
             }
+            //audioManager.StopAudio("DrummingAudio");
+            ThisToggle.isOn = false;
         }
     }
     
     private IEnumerator AutoPlayCoroutine()
     {
+        //audioManager.PlayAudio("DrummingAudio", 0);
         while (moneyTracker.canRoll())
         {
             Task rollTask = reelManager.AllReelsRollAsync(); 

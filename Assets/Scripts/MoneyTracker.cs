@@ -88,7 +88,7 @@ public class MoneyTracker : MonoBehaviour
 
     public bool canRoll()
     {
-        return currentEarnings >= currentBet;
+        return currentEarnings >= currentBet && (currentBet > 0);
     }
     
     public void SetMoney(int amount)

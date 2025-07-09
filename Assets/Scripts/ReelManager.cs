@@ -221,14 +221,23 @@ public class ReelManager : MonoBehaviour
         canRoll = false;
         lineRenderChecker.TurnOffLines();
         if (_leftReel == null || _middleReel == null || _rightReel == null)
-        { return; }
+        {   
+            canRoll = true;
+            return; 
+        }
 
         if (_leftReel.Count == 0 || _middleReel.Count == 0 || _rightReel.Count == 0)
-        { return; }
+        {   canRoll = true;
+            return;
+        }
 
         if (moneyTracker.getCurrentBet() <= 0 || moneyTracker.getCurrentEarnings() < moneyTracker.getCurrentBet())
-        { return; }
+        {   
+            canRoll = true;
+            return;
+        }
         
+        AudioManager.PlayAudio("SingleRollAudio", 0);
         int randomReelRollOffset = UnityEngine.Random.Range(minReelRollLength, maxReelRollLength + 1);
         
         _leftReelIndex = (_leftReelIndex + randomReelRollOffset)%_leftReel.Count;
@@ -253,11 +262,7 @@ public class ReelManager : MonoBehaviour
     {
         await AllReelsRollAsync();
     }
-
-    public bool CanRoll()
-    {
-        return canRoll;
-    }
+    
     private List<String> PrepareGrid(List<String> leftWindow, List<String> midWindow, List<String> rightWindow)
     {
         //Debug.Log($"Left window: {string.Join(",", leftWindow)}");

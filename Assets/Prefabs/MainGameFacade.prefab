@@ -803,6 +803,7 @@ MonoBehaviour:
   lineRenderChecker: {fileID: 5379462524296481981}
   moneyTracker: {fileID: 6923838886041479658}
   ToastMessageAnimator: {fileID: 6962317814335204699}
+  audioManager: {fileID: 0}
 --- !u!1 &717840027426239806
 GameObject:
   m_ObjectHideFlags: 0
@@ -2870,9 +2871,10 @@ MonoBehaviour:
   - {fileID: 3722423516112712839}
   - {fileID: 1355934867619613641}
   SelectionTrackerObj: {fileID: 0}
-  displayDelay: 3
+  displayDelay: 1
   NumberControllerObj: {fileID: 2055566195507116778}
   AudioManager: {fileID: 0}
+  maxDelay: 0.1
   PitchGrowth: 0.2
 --- !u!1 &2055566195507116778
 GameObject:
@@ -4527,7 +4529,19 @@ MonoBehaviour:
   m_Group: {fileID: 1426866547618217606}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!222 &5033890460702839330
 CanvasRenderer:
@@ -10501,7 +10515,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 9.5, y: -10.100031}
+  m_AnchoredPosition: {x: 9.5, y: -6.5}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &3526037758562926525

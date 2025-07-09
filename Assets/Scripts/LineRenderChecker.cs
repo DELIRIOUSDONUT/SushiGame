@@ -20,6 +20,7 @@ public class LineRenderChecker : MonoBehaviour
     [SerializeField] private GameObject NumberControllerObj;
     
     [SerializeField] AudioManagerScript AudioManager;
+    [SerializeField] private float maxDelay;
     [SerializeField] float PitchGrowth = 0.01f;
     
     private NumberController numberController;
@@ -135,7 +136,7 @@ public class LineRenderChecker : MonoBehaviour
                                                     TaskCompletionSource<bool> tcs)
     {
         // First get number of activated lines from selections
-        float scaledDelay = displayDelay / (2 * selections.Count(x => x));
+        float scaledDelay = Math.Max(displayDelay / (2 * selections.Count(x => x)), maxDelay);
         yield return new WaitForSeconds(scaledDelay);
         foreach (var index in indices)
         {
