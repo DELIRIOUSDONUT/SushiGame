@@ -19,11 +19,17 @@ public class LineRenderChecker : MonoBehaviour
     [SerializeField] private float displayDelay = 0.1f;
     [SerializeField] private GameObject NumberControllerObj;
     
+    [SerializeField] AudioManagerScript AudioManager;
+    [SerializeField] float PitchGrowth = 0.01f;
+    
     private NumberController numberController;
     
     private SelectionTracker selectionTracker;
 
     private bool currentlyPlaying = false;
+
+    private float currentLinePitch;
+    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     
@@ -110,6 +116,8 @@ public class LineRenderChecker : MonoBehaviour
         }
         
         var tcs = new TaskCompletionSource<bool>();
+        AudioManager.ResetPitch();
+        currentLinePitch = AudioManager.GetPitch();
         StartCoroutine(ActivateLinesSequentially(scoringStratsIndices, selections, tcs));
         await tcs.Task;
         
@@ -133,8 +141,10 @@ public class LineRenderChecker : MonoBehaviour
         {
             if (selections[index])
             {
+                AudioManager.PlayAudio("LineScoreAudio", currentLinePitch);
                 numberController.Highlight(index+1);
                 strategyGObjects[index].SetActive(true);
+                currentLinePitch += PitchGrowth;
                 yield return new WaitForSeconds(scaledDelay);
             }
         }
