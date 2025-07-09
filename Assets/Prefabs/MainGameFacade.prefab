@@ -12410,6 +12410,10 @@ PrefabInstance:
       propertyPath: maxReelRollLength
       value: 32
       objectReference: {fileID: 0}
+    - target: {fileID: 7151772236064989830, guid: 35ca7efa3cc3f42ceaabb04cdd41a61a, type: 3}
+      propertyPath: minReelRollLength
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 7498482458622350844, guid: 35ca7efa3cc3f42ceaabb04cdd41a61a, type: 3}
       propertyPath: m_MaskInteraction
       value: 1

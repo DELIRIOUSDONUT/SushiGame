@@ -4,7 +4,7 @@ using UnityEngine;
 public class AudioManagerScript : MonoBehaviour
 {
     [SerializeField] private AudioSource LineScoreAudio;
-
+    [SerializeField] private AudioSource SlotAudio;
 
     private float _defaultPitch;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -27,7 +27,26 @@ public class AudioManagerScript : MonoBehaviour
                 LineScoreAudio.pitch = pitch;
                 LineScoreAudio.Play();
                 break;
+            case "SlotAudio":
+                SlotAudio.Play();
+                break;
             default:
+                throw new ArgumentOutOfRangeException(nameof(audioName), audioName, null);
+                // "Audio not found"
+        }
+    }
+
+    public void StopAudio(String audioName)
+    {
+        switch (audioName)
+        {
+            case "LineScoreAudio":
+                LineScoreAudio.Stop();
+                break;
+            case "SlotAudio":
+                SlotAudio.Stop();
+                break;
+            default:    
                 throw new ArgumentOutOfRangeException(nameof(audioName), audioName, null);
                 // "Audio not found"
         }

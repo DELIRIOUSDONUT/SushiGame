@@ -42,6 +42,8 @@ public class ReelManager : MonoBehaviour
     [SerializeField] private int MidReelDelay = 200;
     [SerializeField] private int RightReelDelay = 400;
     
+    [SerializeField] private AudioManagerScript AudioManager;
+    
     private MoneyTracker moneyTracker;
     
     // Actual representation of the reels
@@ -202,17 +204,20 @@ public class ReelManager : MonoBehaviour
             await Task.Delay(delay);
             await reelFunc();
         }
-
+        AudioManager.PlayAudio("SlotAudio", 0);
         Task left = DelayedRoll(() => leftReelRoller.AnimateReelDownAsync(numSlots), LeftReelDelay);
         Task mid  = DelayedRoll(() => middleReelRoller.AnimateReelDownAsync(numSlots), MidReelDelay);
         Task right = DelayedRoll(() => rightReelRoller.AnimateReelDownAsync(numSlots), RightReelDelay);
 
         await Task.WhenAll(left, mid, right);
+        AudioManager.StopAudio("SlotAudio");
     }
 
     
     public async Task AllReelsRollAsync()
     {
+        Debug.Log($"Can roll {canRoll}");
+        if(canRoll == false){return;}
         canRoll = false;
         lineRenderChecker.TurnOffLines();
         if (_leftReel == null || _middleReel == null || _rightReel == null)
